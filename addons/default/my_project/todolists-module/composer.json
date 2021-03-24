@@ -1,0 +1,9 @@
+{
+    "name": "my_project/todolists-module",
+    "type": "streams-addon",
+    "autoload": {
+        "psr-4": {
+            "MyProject\\TodolistsModule\\": "src/"
+        }
+    }
+}

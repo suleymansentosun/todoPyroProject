@@ -1,0 +1,52 @@
+{% extends "theme::layouts/default" %}
+
+{% block content %}
+
+{% set paginator = entries('todolists', 'todos')
+                    .where('users_id', '=', user_id)
+                    .paginate(setting_value('streams::per_page', 5)) %}
+
+{% set categories = "" %}
+
+<table class="table">
+    <thead>
+        <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Title</th>
+        <th scope="col">Description</th>
+        <th scope="col">Categories</th>
+        <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for todo in paginator %}
+            <tr>
+                <th scope="row">{{ todo.id }}</th>
+                <td>{{ todo.title }}</td>
+                <td>{{ todo.description }}</td>
+                <td>
+                    {% for category in todo.categories %}
+                        {% set categories = categories ~ category.name %}                        
+                    {% endfor %}                    
+                    {{ categories }}
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-danger"
+                        href="{{ url_route('my_project.module.todolists::todos.delete', [todo.id]) }}"
+                        role="button">
+                        Delete
+                    </a>
+                    <a class="btn btn-sm btn-warning"
+                        href="{{ url_route('my_project.module.todolists::todos.edit', [todo.id]) }}"
+                        role="button">
+                        Edit
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{{ paginator.links|raw }}
+
+{% endblock %}
